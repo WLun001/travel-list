@@ -8,9 +8,9 @@ HEADER=$(GREEN)Fiber Recipe$(NOCOLOR)
 
 start-web:
 	@echo "$(HEADER): Starting web"
-	npm run build --prefix web
+	@npm run build --prefix web
 
 start-go:
 	@echo "$(HEADER): Starting go"
-	@go run main.go
+	@air
 
