@@ -20,11 +20,19 @@ func run() error {
 		panic(err)
 	}
 	port := viper.Get("PORT")
+	dbURI := viper.Get("DATABASE_URI").(string)
+	r, err := travellist.NewRepo(dbURI)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer r.Close()
+
+	service := travellist.NewService(r)
 
 	app := fiber.New()
 	app.Use(logger.New())
 
 	app.Static("/", "web/dist/web/")
-	travellist.Routes(app)
+	travellist.Routes(app, service)
 	return app.Listen(port)
 }
