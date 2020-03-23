@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -90,7 +91,16 @@ func (d DBRepository) findAll(ctx context.Context) (*Travels, error) {
 }
 
 func (d DBRepository) findOne(ctx context.Context, id string) (*Travel, error) {
-	d.col.FindOne(ctx, bson.E{"_id", id})
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	res := d.col.FindOne(ctx, bson.M{"_id": objectId})
+	var travel Travel
+	if err := res.Decode(&travel); err != nil {
+		return nil, err
+	}
+	return &travel, nil
 }
 
 func (d DBRepository) insertOne(ctx context.Context, travel *Travel) (*Travel, error) {
