@@ -1,0 +1,24 @@
+POST http://localhost:4000/api/travels
+Content-Type: application/json
+
+{
+  "name": "test",
+  "photo": "https://i.insider.com/5cbf3c8fb14bf426443fd865?width=1100&format=jpeg&auto=webp"
+}
+
+###
+
+PUT http://localhost:4000/api/travels/5e805858b3ede182b0a4d5e7
+Content-Type: application/json
+
+{
+  "name": "test 3",
+  "photo": "https://i.insider.com/5cbf3c8fb14bf426443fd865?width=1100&format=jpeg&auto=webp"
+}
+
+###
+
+DELETE http://localhost:4000/api/travels/5e805858b3ede182b0a4d5e7
+Content-Type: application/json
+
+###

@@ -23,8 +23,8 @@ type Repository interface {
 	ping() (string, error)
 	findAll(ctx context.Context) (*Travels, error)
 	findOne(ctx context.Context, id string) (*Travel, error)
-	insertOne(ctx context.Context, travel *Travel) (*Travel, error)
-	updateOne(ctx context.Context, travel *Travel) error
+	insertOne(ctx context.Context, travel *Travel) error
+	updateOne(ctx context.Context, id string, travel *Travel) error
 	deleteOne(ctx context.Context, id string) error
 	Close()
 }
@@ -103,18 +103,36 @@ func (d DBRepository) findOne(ctx context.Context, id string) (*Travel, error) {
 	return &travel, nil
 }
 
-func (d DBRepository) insertOne(ctx context.Context, travel *Travel) (*Travel, error) {
-	panic("implement me")
+func (d DBRepository) insertOne(ctx context.Context, travel *Travel) error {
+	travel.ObjectID = primitive.NewObjectID()
+	if _, err := d.col.InsertOne(ctx, travel); err != nil {
+		return err
+	}
+	return nil
 }
 
-func (d DBRepository) updateOne(ctx context.Context, travel *Travel) error {
-	panic("implement me")
+func (d DBRepository) updateOne(ctx context.Context, id string, travel *Travel) error {
+	travel.ObjectID, _ = primitive.ObjectIDFromHex(id)
+	filter := bson.M{"_id": travel.ObjectID}
+	if _, err := d.col.ReplaceOne(ctx, filter, travel); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d DBRepository) deleteOne(ctx context.Context, id string) error {
-	panic("implement me")
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	if _, err := d.col.DeleteOne(ctx, bson.M{"_id": objectId}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d DBRepository) Close() {
-	panic("implement me")
+	if err := d.client.Disconnect(context.Background()); err != nil {
+		log.Fatal(err)
+	}
 }
