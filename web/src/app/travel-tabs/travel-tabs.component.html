@@ -3,7 +3,7 @@
     <ng-template mat-tab-label>
       <mat-icon>{{tab.icon}}</mat-icon>
       <span class="tab-title">{{tab.title}}</span>
-      <span class="tab-title">({{(tab.data | async)?.length || 0}})</span>
+      <span class="tab-title">({{(tab?.data | async)?.length || 0}})</span>
     </ng-template>
     <app-travel-list (refresh)="refresh()" [travels]="tab.data | async"></app-travel-list>
   </mat-tab>

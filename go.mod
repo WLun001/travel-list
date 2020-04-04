@@ -4,7 +4,8 @@ go 1.14
 
 require (
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
-	github.com/gofiber/fiber v1.8.33
+	github.com/gofiber/cors v0.0.2
+	github.com/gofiber/fiber v1.8.431
 	github.com/gofiber/logger v0.0.1
 	github.com/klauspost/compress v1.10.3 // indirect
 	github.com/pelletier/go-toml v1.6.0 // indirect

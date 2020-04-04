@@ -41,7 +41,7 @@ tool:
 
 start-web: ## start web with live reload
 	@echo "$(HEADER): Starting web"
-	@npm run build --prefix web
+	@npm start --prefix web
 
 clean-web: ## remove web/dist
 	rm -rf web/dist

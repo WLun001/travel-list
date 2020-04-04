@@ -8,7 +8,7 @@ import { NewComponent } from "../new/new.component";
 interface TabData {
   title: string;
   icon: string;
-  data: Observable<Travel[]>
+  data?: Observable<Travel[]>
 }
 
 @Component({
@@ -18,7 +18,16 @@ interface TabData {
 })
 
 export class TravelTabsComponent implements OnInit {
-  tabs: TabData[] = [];
+  tabs: TabData[] = [
+    {
+      title: 'Upcoming',
+      icon: 'flight_takeoff',
+    },
+    {
+      title: 'Done',
+      icon: 'flight_land',
+    }
+  ];
 
   constructor(
     private apiService: ApiService,
@@ -27,11 +36,16 @@ export class TravelTabsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setup();
+    this.refresh();
   }
 
   refresh() {
-    this.setup();
+    const api$ = this.apiService.getTravels$().pipe(shareReplay(1));
+
+    this.tabs = [...this.tabs.map(x => ({
+      ...x,
+      data: api$.pipe(map(travel => travel[x.title.toLowerCase()]))
+    }))];
   }
 
   openDialog(): void {
@@ -46,27 +60,6 @@ export class TravelTabsComponent implements OnInit {
         this.refresh();
       }
     });
-  }
-
-  setup() {
-    const api$ = this.apiService.getTravels$().pipe(shareReplay(1));
-
-    const upcoming$ = api$.pipe(map(x => x.upcoming));
-    const done$ = api$.pipe(map(x => x.done));
-
-    this.tabs = [
-      {
-        title: 'Upcoming',
-        icon: 'flight_takeoff',
-        data: upcoming$,
-      },
-      {
-        title: 'Done',
-        icon: 'flight_land',
-        data: done$,
-      }
-    ];
-
   }
 
 }

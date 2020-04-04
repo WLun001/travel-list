@@ -1,14 +1,17 @@
 package main
 
 import (
+	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
 	"github.com/gofiber/logger"
 	"github.com/spf13/viper"
 	"log"
+	"os"
 	travellist "travel-list/travel-list"
 )
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	if err := run(); err != nil {
 		log.Fatal(err)
 	}
@@ -19,7 +22,7 @@ func run() error {
 	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
 	}
-	port := viper.Get("PORT")
+	port := os.Getenv("PORT")
 	dbURI := viper.Get("DATABASE_URI").(string)
 	r, err := travellist.NewRepo(dbURI)
 	if err != nil {
@@ -31,6 +34,9 @@ func run() error {
 
 	app := fiber.New()
 	app.Use(logger.New())
+	if os.Getenv("APP_ENV") != "production" {
+		app.Use(cors.New())
+	}
 
 	app.Static("/web", "web/dist/web")
 	app.Get("/web/*", func(ctx *fiber.Ctx) {
