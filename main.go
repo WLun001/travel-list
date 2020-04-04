@@ -32,7 +32,10 @@ func run() error {
 	app := fiber.New()
 	app.Use(logger.New())
 
-	app.Static("/", "web/dist/web/")
+	app.Static("/web", "web/dist/web")
+	app.Get("/web/*", func(ctx *fiber.Ctx) {
+		ctx.SendFile("web/dist/web/index.html")
+	})
 	travellist.Routes(app, service)
 	return app.Listen(port)
 }
