@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environments/environment";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 
 
 export interface Travel {
@@ -22,6 +22,7 @@ export class ApiService {
   getTravels$() {
     return this.http.get<Travel[]>(`${ environment.apiUrl }/travels`)
       .pipe(
+        filter(x => x?.length > 0),
         map(x => ({
           upcoming: x.filter(y => !y.done),
           done: x.filter(y => y.done)

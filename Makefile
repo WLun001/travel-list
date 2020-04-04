@@ -26,7 +26,6 @@ else
 	@echo "please intall air, run make tool"
 endif
 
-
 build: ## build docker image
 	docker build -t travel:${TAG} .
 
