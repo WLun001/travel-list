@@ -54,9 +54,9 @@ export class TravelTabsComponent implements OnInit {
       data: {},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result) {
-        void this.apiService.createTravel$(result).toPromise();
+        await this.apiService.createTravel$(result).toPromise();
         this.refresh();
       }
     });
