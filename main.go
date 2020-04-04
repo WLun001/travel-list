@@ -36,6 +36,11 @@ func run() error {
 	app.Get("/web/*", func(ctx *fiber.Ctx) {
 		ctx.SendFile("web/dist/web/index.html")
 	})
+
 	travellist.Routes(app, service)
+
+	app.Get("/", func(ctx *fiber.Ctx) {
+		ctx.Redirect("/web")
+	})
 	return app.Listen(port)
 }
