@@ -1,0 +1,26 @@
+steps:
+  - id: docker build
+    name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA'
+      - '-t'
+      - 'asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:latest'
+      - '.'
+  - id: docker push
+    name: 'asia.gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME'
+  - id: Deploy to Cloud Run
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'sh'
+    args:
+      - |
+        gcloud run deploy $_SERVICE_NAME \
+        --image asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA \
+        --region $_REGION --platform managed --allow-unauthenticated \
+        --port 4000 \
+        --set-env-vars APP_ENV=production
+
