@@ -25,6 +25,7 @@ type Repository interface {
 	findOne(ctx context.Context, id string) (*Travel, error)
 	insertOne(ctx context.Context, travel *Travel) error
 	updateOne(ctx context.Context, id string, travel *Travel) error
+	updateField(ctx context.Context, id, field string, value interface{}) error
 	deleteOne(ctx context.Context, id string) error
 	Close()
 }
@@ -115,6 +116,20 @@ func (d DBRepository) updateOne(ctx context.Context, id string, travel *Travel) 
 	travel.ObjectID, _ = primitive.ObjectIDFromHex(id)
 	filter := bson.M{"_id": travel.ObjectID}
 	if _, err := d.col.ReplaceOne(ctx, filter, travel); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d DBRepository) updateField(ctx context.Context, id, field string, value interface{}) error {
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.M{"_id": objectID}
+	update := bson.D{{
+		"$set", bson.D{{
+			field, value,
+		}},
+	}}
+	if _, err := d.col.ReplaceOne(ctx, filter, update); err != nil {
 		return err
 	}
 	return nil
