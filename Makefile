@@ -5,7 +5,7 @@ NOCOLOR=\033[0m
 HEADER=$(GREEN)Fiber Recipe$(NOCOLOR)
 
 AIR := $(shell command -v air || 0)
-.PHONY: help start start-go start-web clean-web clean-go
+.PHONY: help start start-go start-web clean-web clean-go build
 
 default: help
 
@@ -26,11 +26,16 @@ else
 	@echo "please intall air, run make tool"
 endif
 
+
+build: ## build docker image
+	docker build -t travel:${TAG} .
+
 download-go: ## download Go dependencies
 	go mod download
 
 clean-go: ## remove go binary
 	rm -rf tmp/
+	go clean -modcache
 
 tool:
 	go get -u github.com/cosmtrek/air
