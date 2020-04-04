@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add new travel destination</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input [(ngModel)]="data.name" matInput placeholder="Around the world">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Photo URL</mat-label>
+    <input [(ngModel)]="data.photo" matInput placeholder="https://awsome.jpg">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button (click)="close()" mat-button>Cancel</button>
+  <button (click)="save()" [disabled]="!data.name || !data.name" cdkFocusInitial mat-button>Ok</button>
+</div>
