@@ -10,11 +10,6 @@ steps:
       - '--context=.'
       - '--cache=true'
       - '--cache-ttl=120h'
-  - id: docker push
-    name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA'
   - id: Deploy to Cloud Run
     name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'sh'
