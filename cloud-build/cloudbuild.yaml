@@ -16,8 +16,8 @@ steps:
     args:
       - |
         gcloud run deploy $_SERVICE_NAME \
-        --image asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA \
-        --region $_REGION --platform managed --allow-unauthenticated \
-        --port 4000 \
-        --set-env-vars APP_ENV=production, APP_SECRET_MANAGER_RESOURCE="projects/755927838116/secrets/travel-list-secret/versions/latest"
+        --image=asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA \
+        --region=$_REGION --platform managed --allow-unauthenticated \
+        --port=4000 \
+        --set-env-vars=APP_ENV=production,APP_SECRET_MANAGER_RESOURCE="projects/755927838116/secrets/travel-list-secret/versions/latest"
 
