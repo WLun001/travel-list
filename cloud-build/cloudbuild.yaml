@@ -14,6 +14,7 @@ steps:
     name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
+      - '-c'
       - |
         gcloud run deploy $_SERVICE_NAME \
         --image=asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA \
