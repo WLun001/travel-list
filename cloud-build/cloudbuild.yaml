@@ -11,7 +11,7 @@ steps:
       - '--cache=true'
       - '--cache-ttl=120h'
   - id: docker push
-    name: 'asia.gcr.io/cloud-builders/docker'
+    name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
       - 'asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME'
