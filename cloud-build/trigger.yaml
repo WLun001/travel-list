@@ -5,6 +5,11 @@ github:
   owner: WLun001
   push:
     branch: ^master$
+ignoredFiles:
+  - http/**
+  - Makefile
+  - .gitignore
+  - .air.conf
 name: default-push-master
 substitutions:
   _REGION: asia-east1
