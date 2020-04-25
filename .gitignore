@@ -89,3 +89,4 @@ fabric.properties
 vendor/
 tmp/
 .env.yaml
+/credentials

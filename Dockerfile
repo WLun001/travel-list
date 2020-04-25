@@ -23,6 +23,5 @@ USER travel
 WORKDIR /home/travel
 COPY --from=build-go /travel ./
 COPY --from=build-web web/dist ./web/dist
-COPY .env.yaml ./
 EXPOSE 4000
 ENTRYPOINT ["./travel"]

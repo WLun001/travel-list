@@ -1,10 +1,15 @@
 package main
 
 import (
+	"bytes"
+	secretmanager "cloud.google.com/go/secretmanager/apiv1"
+	"context"
+	"fmt"
 	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
 	"github.com/gofiber/logger"
 	"github.com/spf13/viper"
+	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 	"log"
 	"os"
 	travellist "travel-list/travel-list"
@@ -12,15 +17,16 @@ import (
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Printf("Running application in %v environment", os.Getenv("APP_ENV"))
 	if err := run(); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func run() error {
-	viper.SetConfigFile(".env.yaml")
-	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
+
+	if err := readConfig(); err != nil {
+		return err
 	}
 	port := os.Getenv("PORT")
 	dbURI := viper.Get("DATABASE_URI").(string)
@@ -33,8 +39,8 @@ func run() error {
 	service := travellist.NewService(r)
 
 	app := fiber.New()
-	app.Use(logger.New())
-	if os.Getenv("APP_ENV") != "production" {
+	if !travellist.IsProduction() {
+		app.Use(logger.New())
 		app.Use(cors.New())
 	}
 
@@ -49,4 +55,43 @@ func run() error {
 
 	travellist.Routes(app, service)
 	return app.Listen(port)
+}
+
+func readConfig() error {
+	if travellist.IsProduction() {
+		secret, err := accessSecret("APP_SECRET_MANAGER_RESOURCE")
+		if err != nil {
+			return err
+		}
+		viper.SetConfigType("yaml")
+		if err := viper.ReadConfig(bytes.NewBuffer(secret)); err != nil {
+			return err
+		}
+	} else {
+		viper.SetConfigFile(".env.yaml")
+		if err := viper.ReadInConfig(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func accessSecret(name string) ([]byte, error) {
+
+	ctx := context.Background()
+	client, err := secretmanager.NewClient(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create secretmanager client: %v", err)
+	}
+
+	req := &secretmanagerpb.AccessSecretVersionRequest{
+		Name: name,
+	}
+
+	result, err := client.AccessSecretVersion(ctx, req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to access secret version: %v", err)
+	}
+
+	return result.Payload.GetData(), nil
 }
