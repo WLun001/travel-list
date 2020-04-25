@@ -12,7 +12,7 @@ steps:
       - '--cache-ttl=120h'
   - id: Deploy to Cloud Run
     name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'sh'
+    entrypoint: 'bash'
     args:
       - |
         gcloud run deploy $_SERVICE_NAME \
