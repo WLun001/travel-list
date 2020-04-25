@@ -11,9 +11,7 @@ require (
 	github.com/golang/protobuf v1.4.0 // indirect
 	github.com/klauspost/compress v1.10.3 // indirect
 	github.com/pelletier/go-toml v1.6.0 // indirect
-	github.com/savsgio/gotils v0.0.0-20200319105752-a9cc718f6a3f // indirect
 	github.com/spf13/viper v1.6.2
-	github.com/stretchr/testify v1.4.0 // indirect
 	go.mongodb.org/mongo-driver v1.3.1
 	golang.org/x/net v0.0.0-20200421231249-e086a090c8fd // indirect
 	golang.org/x/sys v0.0.0-20200420163511-1957bb5e6d1f // indirect

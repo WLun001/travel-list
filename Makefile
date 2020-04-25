@@ -35,6 +35,7 @@ download-go: ## download Go dependencies
 clean-go: ## remove go binary
 	rm -rf tmp/
 	go clean -modcache
+	go mod tidy
 
 tool:
 	go get -u github.com/cosmtrek/air
