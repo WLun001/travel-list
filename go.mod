@@ -5,11 +5,11 @@ go 1.14
 require (
 	cloud.google.com/go v0.56.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
-	github.com/gofiber/cors v0.0.2
-	github.com/gofiber/fiber v1.8.431
-	github.com/gofiber/logger v0.0.1
+	github.com/gofiber/cors v0.0.3
+	github.com/gofiber/fiber v1.9.2
+	github.com/gofiber/logger v0.0.3
 	github.com/golang/protobuf v1.4.0 // indirect
-	github.com/klauspost/compress v1.10.3 // indirect
+	github.com/klauspost/compress v1.10.5 // indirect
 	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/spf13/viper v1.6.2
 	go.mongodb.org/mongo-driver v1.3.1

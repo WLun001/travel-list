@@ -59,7 +59,7 @@ func run() error {
 
 func readConfig() error {
 	if travellist.IsProduction() {
-		secret, err := accessSecret("APP_SECRET_MANAGER_RESOURCE")
+		secret, err := accessSecret(os.Getenv("APP_SECRET_MANAGER_RESOURCE"))
 		if err != nil {
 			return err
 		}
