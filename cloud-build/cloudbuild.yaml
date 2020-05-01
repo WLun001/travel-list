@@ -1,16 +1,32 @@
 steps:
   # use Kaniko to speed up build process
   # it will push to container registry after it's done
-  - name: 'gcr.io/kaniko-project/executor:latest'
-    id: 'build-and-push'
-    args:
-      - '--destination=asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA'
-      - '--destination=asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:latest'
-      - '--dockerfile=Dockerfile'
-      - '--context=.'
+  # not using kaniko first, it has problem with multi-stage build
+  #  - name: 'gcr.io/kaniko-project/executor:latest'
+  #    id: 'build-and-push'
+  #    args:
+  #      - '--destination=asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA'
+  #      - '--destination=asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:latest'
+  #      - '--dockerfile=Dockerfile'
+  #      - '--context=.'
   #      - '--cache=true'
   #      - '--cache-ttl=120h'
-  - id: Deploy to Cloud Run
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Docker build'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA'
+      - '-t'
+      - 'asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:latest'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Docker push'
+    args: ['push', 'asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:$SHORT_SHA']
+
+  - id: 'Deploy to Cloud Run'
     name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
