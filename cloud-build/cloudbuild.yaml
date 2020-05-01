@@ -2,6 +2,7 @@ steps:
   # use Kaniko to speed up build process
   # it will push to container registry after it's done
   # not using kaniko first, it has problem with multi-stage build
+  # https://github.com/GoogleContainerTools/kaniko/issues/595
   #  - name: 'gcr.io/kaniko-project/executor:latest'
   #    id: 'build-and-push'
   #    args:
