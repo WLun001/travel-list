@@ -8,8 +8,8 @@ steps:
       - '--destination=asia.gcr.io/$PROJECT_ID/$_SERVICE_NAME:latest'
       - '--dockerfile=Dockerfile'
       - '--context=.'
-      - '--cache=true'
-      - '--cache-ttl=120h'
+  #      - '--cache=true'
+  #      - '--cache-ttl=120h'
   - id: Deploy to Cloud Run
     name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
