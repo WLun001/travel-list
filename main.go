@@ -5,9 +5,9 @@ import (
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"context"
 	"fmt"
-	"github.com/gofiber/cors"
-	"github.com/gofiber/fiber"
-	"github.com/gofiber/logger"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/spf13/viper"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 	"log"
@@ -45,16 +45,16 @@ func run() error {
 	}
 
 	app.Static("/web", "web/dist/web")
-	app.Get("/web/*", func(ctx *fiber.Ctx) {
-		ctx.SendFile("web/dist/web/index.html")
+	app.Get("/web/*", func(ctx *fiber.Ctx) error {
+		return ctx.SendFile("web/dist/web/index.html")
 	})
 
-	app.Get("/", func(ctx *fiber.Ctx) {
-		ctx.Redirect("/web")
+	app.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.Redirect("/web")
 	})
 
 	travellist.Routes(app, service)
-	return app.Listen(port)
+	return app.Listen(fmt.Sprintf(":%s", port))
 }
 
 func readConfig() error {
