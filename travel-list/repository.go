@@ -62,7 +62,7 @@ func NewRepo(uri string) (Repository, error) {
 	}, nil
 }
 
-func (d DBRepository) ping() (string, error) {
+func (d *DBRepository) ping() (string, error) {
 	ctx := context.Background()
 	err := d.client.Ping(ctx, readpref.Primary())
 	if err != nil {
@@ -71,7 +71,7 @@ func (d DBRepository) ping() (string, error) {
 	return "connection to database established", nil
 }
 
-func (d DBRepository) findAll(ctx context.Context) (*Travels, error) {
+func (d *DBRepository) findAll(ctx context.Context) (*Travels, error) {
 	c, err := d.col.Find(ctx, bson.D{})
 	if err != nil {
 		return nil, err
@@ -91,7 +91,7 @@ func (d DBRepository) findAll(ctx context.Context) (*Travels, error) {
 	return &travels, nil
 }
 
-func (d DBRepository) findOne(ctx context.Context, id string) (*Travel, error) {
+func (d *DBRepository) findOne(ctx context.Context, id string) (*Travel, error) {
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func (d DBRepository) findOne(ctx context.Context, id string) (*Travel, error) {
 	return &travel, nil
 }
 
-func (d DBRepository) insertOne(ctx context.Context, travel *Travel) error {
+func (d *DBRepository) insertOne(ctx context.Context, travel *Travel) error {
 	travel.ObjectID = primitive.NewObjectID()
 	if _, err := d.col.InsertOne(ctx, travel); err != nil {
 		return err
@@ -112,7 +112,7 @@ func (d DBRepository) insertOne(ctx context.Context, travel *Travel) error {
 	return nil
 }
 
-func (d DBRepository) updateOne(ctx context.Context, id string, travel *Travel) error {
+func (d *DBRepository) updateOne(ctx context.Context, id string, travel *Travel) error {
 	travel.ObjectID, _ = primitive.ObjectIDFromHex(id)
 	filter := bson.M{"_id": travel.ObjectID}
 	if _, err := d.col.ReplaceOne(ctx, filter, travel); err != nil {
@@ -121,7 +121,7 @@ func (d DBRepository) updateOne(ctx context.Context, id string, travel *Travel) 
 	return nil
 }
 
-func (d DBRepository) updateField(ctx context.Context, id, field string, value interface{}) error {
+func (d *DBRepository) updateField(ctx context.Context, id, field string, value interface{}) error {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.M{"_id": objectID}
 	update := bson.D{{
@@ -135,7 +135,7 @@ func (d DBRepository) updateField(ctx context.Context, id, field string, value i
 	return nil
 }
 
-func (d DBRepository) deleteOne(ctx context.Context, id string) error {
+func (d *DBRepository) deleteOne(ctx context.Context, id string) error {
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
@@ -146,7 +146,7 @@ func (d DBRepository) deleteOne(ctx context.Context, id string) error {
 	return nil
 }
 
-func (d DBRepository) Close() {
+func (d *DBRepository) Close() {
 	if err := d.client.Disconnect(context.Background()); err != nil {
 		log.Fatal(err)
 	}

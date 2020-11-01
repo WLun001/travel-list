@@ -25,7 +25,7 @@ func NewService(r Repository) Service {
 	return &appService{Repository: r}
 }
 
-func (a appService) getTravels(c *fiber.Ctx) error {
+func (a *appService) getTravels(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 
 	defer cancel()
@@ -34,7 +34,7 @@ func (a appService) getTravels(c *fiber.Ctx) error {
 	return response(travels, http.StatusOK, err, c)
 }
 
-func (a appService) getTravel(c *fiber.Ctx) error {
+func (a *appService) getTravel(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if id == "" {
 		return response(nil, http.StatusUnprocessableEntity, errors.New("id is not defined"), c)
@@ -46,7 +46,7 @@ func (a appService) getTravel(c *fiber.Ctx) error {
 	return response(travel, http.StatusOK, err, c)
 }
 
-func (a appService) createTravel(c *fiber.Ctx) error {
+func (a *appService) createTravel(c *fiber.Ctx) error {
 	var travel Travel
 	if err := c.BodyParser(&travel); err != nil {
 		return response(travel, http.StatusUnprocessableEntity, err, c)
@@ -58,7 +58,7 @@ func (a appService) createTravel(c *fiber.Ctx) error {
 	return response(travel, http.StatusOK, err, c)
 }
 
-func (a appService) updateTravel(c *fiber.Ctx) error {
+func (a *appService) updateTravel(c *fiber.Ctx) error {
 	id := c.Params("id")
 	log.Println(id)
 	if id == "" {
@@ -76,7 +76,7 @@ func (a appService) updateTravel(c *fiber.Ctx) error {
 	return response(nil, http.StatusNoContent, err, c)
 }
 
-func (a appService) deleteTravel(c *fiber.Ctx) error {
+func (a *appService) deleteTravel(c *fiber.Ctx) error {
 	id := c.Params("id")
 	log.Println(id)
 	if id == "" {
