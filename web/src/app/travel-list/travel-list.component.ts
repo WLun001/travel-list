@@ -10,6 +10,8 @@ import { Subscription } from "rxjs";
 export class TravelListComponent implements OnDestroy {
   @Input() travels: Travel[];
   @Output() refresh = new EventEmitter();
+
+  defaultImage = 'https://image.shutterstock.com/image-vector/example-red-square-grunge-stamp-260nw-327662909.jpg';
   private subscription = new Subscription();
 
   constructor(private apiService: ApiService) {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Travel } from "../api.service";
 
@@ -7,13 +7,10 @@ import { Travel } from "../api.service";
   templateUrl: './new.component.html',
   styleUrls: ['./new.component.scss']
 })
-export class NewComponent implements OnInit {
+export class NewComponent {
 
   constructor(public dialogRef: MatDialogRef<NewComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Travel) {
-  }
-
-  ngOnInit(): void {
   }
 
   close(): void {

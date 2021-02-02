@@ -3,14 +3,12 @@
             class="column is-one-third-desktop is-half-tablet travel-card">
     <mat-card-header class="mat-card-header">
       <div class="mat-card-title">
-          <span>
-                {{travel.name}}
-          </span>
+          <span>{{travel.name}}</span>
       </div>
     </mat-card-header>
     <mat-card-content>
       <figure class="image is-square">
-        <img [alt]="travel.name" [src]="travel.photo" class="is-rounded">
+        <img [alt]="travel.name" [src]="travel.photo || defaultImage" class="is-rounded travel-image">
       </figure>
     </mat-card-content>
     <mat-card-actions>
